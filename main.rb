@@ -35,17 +35,19 @@ end
 
 menu_button.click
 
+# 等待前 20 張菜單相片的 elements 讀取完成
 menu_photo_divs = []
 wait.until do
   menu_photo_divs = driver.find_elements(:xpath, '//a[@data-photo-index]/div[1]/div[1]')
   menu_photo_divs.length == 20
 end
 
+# 建立商家的相片目錄
 photo_dir = 'photos'
 response = FileUtils.mkdir_p("#{photo_dir}/#{restaurant_name}")
 puts "photo directory for the restaurant successfully created: #{response}"
 
-# binding.pry
+# 儲存菜單相片
 menu_photo_divs.each do |photo_div|
   driver.action.move_to(photo_div).perform
   photo_div_style = photo_div.attribute('style')

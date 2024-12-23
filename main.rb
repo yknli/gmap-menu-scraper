@@ -1,5 +1,6 @@
 require 'selenium-webdriver'
 require 'json'
+require 'pry'
 
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_argument('--ignore-certificate-errors')
@@ -17,19 +18,39 @@ photos_n_videos_header = driver.find_element(:xpath, '//h2[contains(string(), "�
 # 捲動畫面到 "相片和影片" header
 driver.execute_script("arguments[0].scrollIntoView(true);" , photos_n_videos_header)
 
-# 先點選進 "全部"
-menu_button = driver.find_element(:xpath, '//button[@aria-label="全部"]')
-driver.action.move_to(menu_button).click.perform
+# 點選向右箭頭
+next_button = driver.find_element(:xpath, '//button[@aria-label="下一張相片"]')
+driver.execute_script("arguments[0].click();" , next_button)
 
-# 點選上半部的 "菜單" 頁籤
-menu_tab_button = nil
-
+# 點選 "菜單"
 wait = Selenium::WebDriver::Wait.new(timeout: 10)
+menu_button = nil
 wait.until do
-  menu_tab_button = driver.find_element(:xpath, '//div[contains(string(), "菜單")]/ancestor::button[1]')
-  menu_tab_button.displayed?
+  menu_button = driver.find_element(:xpath, '//button[@aria-label="菜單"]/img')
+  menu_button.displayed?
 end
 
-driver.action.move_to(menu_tab_button).click.perform
+menu_button.click
 
-sleep(3)
+menu_photo_divs = []
+wait.until do
+  menu_photo_divs = driver.find_elements(:xpath, '//a[@data-photo-index]/div[1]/div[1]')
+  puts menu_photo_divs[19].attribute('style') if menu_photo_divs[19] != nil
+  menu_photo_divs.length == 20
+end
+puts menu_photo_divs.length
+
+# binding.pry
+menu_photo_divs.map do |photo_div|
+  driver.action.move_to(photo_div).perform
+  photo_div_style = photo_div.attribute('style')
+
+  start_point = 'https'
+  url_start_index = photo_div_style.index(start_point)
+  start_index = url_start_index > -1 ? url_start_index : 0
+  photo_url = photo_div_style[start_index...photo_div_style.index('");')]
+  puts photo_url
+  photo_url
+end
+
+puts menu_photo_divs.length

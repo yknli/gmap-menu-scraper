@@ -9,7 +9,7 @@ options.add_argument('--ignore-certificate-errors')
 options.add_argument('--disable-popup-blocking')
 options.add_argument('--disable-translate')
 options.add_argument("--window-size=1920,1080")
-# options.add_argument('--headless')
+options.add_argument('--headless')
 driver = Selenium::WebDriver.for :chrome, options: options
 
 restaurant_name = "三奇壹號咖啡館x築甜製菓"

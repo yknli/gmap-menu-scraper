@@ -45,7 +45,6 @@ end
 # 建立商家的相片目錄
 photo_dir = 'photos'
 response = FileUtils.mkdir_p("#{photo_dir}/#{restaurant_name}")
-puts "photo directory for the restaurant successfully created: #{response}"
 
 # 儲存菜單相片
 menu_photo_divs.each do |photo_div|
@@ -58,8 +57,7 @@ menu_photo_divs.each do |photo_div|
   photo_url = photo_div_style[start_index...photo_div_style.index('");')]
   photo_name = "#{photo_dir}/#{restaurant_name}/#{photo_url.split('/').last}.jpg"
   File.open(photo_name, 'wb') do |f|
-    puts "photo url: #{photo_url}"
+    puts photo_url
     f.write URI.open(photo_url).read
-    puts "photo successfully downloaded: #{photo_name}"
   end
 end

@@ -12,6 +12,8 @@ options.add_argument("--window-size=1920,1080")
 options.add_argument('--headless')
 driver = Selenium::WebDriver.for :chrome, options: options
 
+wait = Selenium::WebDriver::Wait.new(timeout: 10)
+
 restaurant_name = "三奇壹號咖啡館x築甜製菓"
 driver.navigate.to "http://maps.google.com/?q=#{restaurant_name}"
 
@@ -26,7 +28,6 @@ next_button = driver.find_element(:xpath, '//button[@aria-label="下一張相片
 driver.execute_script("arguments[0].click();" , next_button)
 
 # 點選 "菜單"
-wait = Selenium::WebDriver::Wait.new(timeout: 10)
 menu_button = nil
 wait.until do
   menu_button = driver.find_element(:xpath, '//button[@aria-label="菜單"]/img')

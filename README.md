@@ -39,3 +39,8 @@ Run the script with the following command:
 ```sh
 ruby main.rb
 ```
+
+## TODO
+
+- Use AI models to recognize menu items from the scraped photos.
+- Generate hashtags for the coffee shop based on the recognized menu items.
